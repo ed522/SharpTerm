@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="$([MSBuild]::IsOSPlatform('Linux')) or $([MSBuild]::IsOSPlatform('FreeBSD'))">
+    <Exec Command="gcc tcwrapper_posix.c -shared -o bin/Debug/net9.0/tcwrapper_posix.so" />
+  </Target>
+  <Target Name="ImportPosixLibrary" BeforeTargets="BeforeBuild" Condition="$([MSBuild]::IsOSPlatform('Linux')) or $([MSBuild]::IsOSPlatform('FreeBSD'))">
+    <ItemGroup>
+      <NativeLibrary Include="bin/Debug/net9.0/tcwrapper_posix.so" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="PreBuildMac" BeforeTargets="PreBuildEvent" Condition="$([MSBuild]::IsOSPlatform('MacOS'))">
+    <Exec Command="gcc tcwrapper_posix.c -dynamiclib -o bin/Debug/net9.0/tcwrapper_posix.dylib" />
+  </Target>
+  <Target Name="ImportPosixLibraryMac" BeforeTargets="BeforeBuild" Condition="$([MSBuild]::IsOSPlatform('MacOS'))">
+    <ItemGroup>
+      <NativeLibrary Include="bin/Debug/net9.0/tcwrapper_posix.dylib" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CleanUp" AfterTargets="Clean">
+    <Delete Files="tcwrapper_posix.o" />
+    <Delete Files="tcwrapper_posix.so" />
+    <Delete Files="tcwrapper_posix.dylib" />
+  </Target>
+
+</Project>
