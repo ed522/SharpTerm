@@ -24,7 +24,7 @@ public class LargeTextElement(string text) : IFormattedTextElement
         }
 
     }
-    private static string[] Wrap(string[] lines, int maxWidth, int tabSize)
+    internal static string[] Wrap(string[] lines, int maxWidth, int tabSize)
     {
         var wrappedLines = new List<string>();
         // wrap each line to maxWidth, and add to wrappedLines

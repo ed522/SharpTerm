@@ -1,0 +1,4 @@
+# keeps getting generated but the solution is in a dir above
+SharpTerm.sln
+bin/
+obj/
